@@ -24,7 +24,7 @@ RUN apt-get update && \
     libatlas-base-dev \
     libsuitesparse-dev
 
-WORKDIR /opt/source
+RUN mkdir -p /opt/source && cd /opt/source
 
 # Install Ceres Solver
 RUN git clone https://ceres-solver.googlesource.com/ceres-solver && \
