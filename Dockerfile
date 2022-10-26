@@ -24,21 +24,20 @@ RUN apt-get update && \
     libatlas-base-dev \
     libsuitesparse-dev
 
-RUN mkdir -p /opt/source && cd /opt/source
+RUN mkdir -p /opt/source
 
 # Install Ceres Solver
-RUN git clone https://ceres-solver.googlesource.com/ceres-solver && \
-    cd ceres-solver && \
-    git checkout $(git describe --tags)
-RUN mkdir build && cd build
-RUN cmake .. -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
-RUN make -j && make install
+RUN cd /opt/source && \
+    git clone https://ceres-solver.googlesource.com/ceres-solver && \
+    cd ceres-solver && git checkout $(git describe --tags) && \
+    mkdir build && cd build && \
+    cmake .. -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF && \
+    make -j && make install
 
 # Build COLMAP
-RUN cd /opt/source
-RUN git clone https://github.com/colmap/colmap.git && \
-    cd colmap && \
-    git checkout dev
-RUN mkdir build && cd build
-RUN cmake ..
-RUN make -j && make install
+RUN cd /opt/source && \
+    git clone https://github.com/colmap/colmap.git && \
+    cd colmap && git checkout dev && \
+    mkdir build && cd build && \
+    cmake .. && \
+    make -j && make install
