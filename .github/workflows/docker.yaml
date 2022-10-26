@@ -30,4 +30,5 @@ jobs:
         with:
           push: true
           platforms: linux/amd64
+          context: ./docker
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/colmap:latest
