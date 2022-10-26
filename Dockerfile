@@ -1,5 +1,8 @@
 FROM ubuntu:20.04
 
+# Prevent stop building ubuntu at time zone selection.  
+ENV DEBIAN_FRONTEND=noninteractive
+
 RUN apt-get update && \
     apt-get install -y \
     git \
@@ -27,12 +30,13 @@ RUN apt-get update && \
 RUN mkdir -p /opt/source
 
 # Install Ceres Solver
+ARG CERES_SOLVER_VERSION=2.1.0
 RUN cd /opt/source && \
-    git clone https://ceres-solver.googlesource.com/ceres-solver && \
-    cd ceres-solver && git checkout $(git describe --tags) && \
-    mkdir build && cd build && \
-    cmake .. -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF && \
-    make -j && make install
+    git clone https://github.com/ceres-solver/ceres-solver.git --branch ${CERES_SOLVER_VERSION} && \
+    cd ceres-solver && \
+	mkdir build && cd build && \
+	cmake .. -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF && \
+	make -j4 && make install
 
 # Build COLMAP
 RUN cd /opt/source && \
@@ -40,4 +44,4 @@ RUN cd /opt/source && \
     cd colmap && git checkout dev && \
     mkdir build && cd build && \
     cmake .. && \
-    make -j && make install
+    make -j4 && make install
